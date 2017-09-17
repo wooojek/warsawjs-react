@@ -1,123 +1,128 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+
+import {
+  TransactionList, CategoryList
+} from './components';
+
 import logo from './logo.svg';
 import './App.css';
-import Counter from './components/counter.js';
-import Stateless from "./components/stateless";
-import Stateful from "./components/stateful";
-import TransactionCard from "./components/transactionCard";
-import TransactionList from "./components/transactionList";
-import TransactionForm from "./components/transactionForm";
 
-function App2(props) {
-    return <button onClick={props.func}> {props.name}</button>
-}
-
-const transactions = [
-    {
+class App extends Component {
+  state = {
+    currentView: 'transactions',
+    transactions: [
+      {
         id: 1,
         description: 'Potwierdzenie uczestnictwa w warsztatach WarsawJS',
         value: 20,
         date: '16.09.2017',
         category: 'Edukacja'
-    },
-    {
+      },
+      {
         id: 2,
         description: 'Bilet na pociąg',
         value: 120,
         date: '07.09.2017',
         category: 'Transport'
-    },
-    {
+      },
+      {
         id: 3,
         description: 'Części do samochodu',
         value: 430,
         date: '26.08.2017',
         category: 'Samochód'
-    }
-];
+      }
+    ],
+    categories: [
+      {
+        id: 1,
+        name: 'Edukacja',
+        budgeted: 100,
+        activity: 50
+      },
+      {
+        id: 2,
+        name: 'Transport',
+        budgeted: 200,
+        activity: 123
+      },
+      {
+        id: 3,
+        name: 'Samochód',
+        budgeted: 300,
+        activity: 170
+      }
+    ]
+  }
 
-class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            // counter: 5,
-            // lista: ["a", "b", "c"],
-            // name: "Ryszard",
-            transactions: transactions,
-        }
-    }
+  handleRemoveTransaction = ({ id }) => {
+    const { transactions } = this.state;
 
-    removeTransaction = ({ id }) => {
-        const temp = this.state.transactions.slice();
+    this.setState({ transactions: transactions.filter(transaction => transaction.id !== id) });
+  }
 
-        const results = temp.filter(item => item.id !== id);
+  handleAddTransaction = (transaction) => {
+    const { transactions } = this.state;
 
-        this.setState({
-            transactions: results,
-        });
-    }
+    this.setState({
+      transactions: [
+        ...transactions,
+        { id: Math.random().toString(36).substring(7), ...transaction }
+      ]
+    });
+  }
 
-    handleSubmit = (newRecord) => {
-        const { transactions } = this.state;
-        const lastIndex = this.state.transactions[transactions.length-1].id;
-
-        this.setState({
-            transactions: [
-                ...transactions,
-                { id: lastIndex + 1, ...newRecord }
-            ]
-        });
-    }
-
-    render() {
-        // const transaction = this.state.transactions[0];
-        // const { description } = this.state.transactions[1];
-        const { transactions } = this.state;
-        return (
-            <div className="App">
-                <div className="App-header">
-                    <img src={logo} className="App-logo" alt="logo"/>
-                    <h2>Welcome to React</h2>
-                </div>
-                <p className="App-intro">
-                    Hi {this.props.name}!
-                </p>
-                <TransactionForm handleSubmit={this.handleSubmit}/>
-                <TransactionList transactions={transactions} onRemoveTransaction={this.removeTransaction}/>
-            </div>
-        );
+  handleChangeCategoryBudget = ({ id, budgeted }) => {
+    const { categories } = this.state;
+    const categoryIndex = categories.findIndex(category => category.id === id);
+    if (categoryIndex === -1) {
+      console.error(`Category with index ${id} not found`)
+      return;
     }
 
+    categories[categoryIndex].budgeted = budgeted;
+    this.setState({ categories });
+  }
 
-    //
-    // klikam = () => {
-    //     this.setState({counter: this.state.counter + 1},
-    //         () => {
-    //             console.log(this.state.counter);
-    //         })
-    //
-    // };
+  handleRemoveCategory = ({ id }) => {
+    const { categories } = this.state;
 
-    //
-    // render() {
-    //     console.log(this.state);
-    //     const {name} = this.state;
-    //     return (
-    //         <div className="App">
-    //             <div className="App-header">
-    //                 <img src={logo} className="App-logo" alt="logo"/>
-    //                 <h2>Welcome to React</h2>
-    //             </div>
-    //             <p className="App-intro">
-    //                 Hi {this.props.name}!
-    //             </p>
-    //             <button onClick={this.klikam}>+1</button>
-    //             <counter count={this.state.counter}/>
-    //             <Stateless name={name}/>
-    //             <Stateful name={name}/>
-    //         </div>
-    //     );
-    // }
+    this.setState({ categories: categories.filter(category => category.id !== id) });
+  }
+
+  handleChangeView = (view) => {
+    this.setState({ currentView: view });
+  }
+
+  render() {
+    const { transactions, categories, currentView } = this.state;
+
+    return (
+      <div className="App">
+        <div className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h2>Welcome to React</h2>
+        </div>
+        <div>
+          <button onClick={() => this.handleChangeView('transactions')}>Transactions</button>
+          <button onClick={() => this.handleChangeView('categories')}>Categories</button>
+        </div>
+        {currentView === 'transactions' ? (
+          <TransactionList
+            items={transactions}
+            onRemoveTransaction={this.handleRemoveTransaction}
+            onAddTransaction={this.handleAddTransaction}
+          />
+        ) : (
+          <CategoryList
+            items={categories}
+            handleChangeCategoryBudget={this.handleChangeCategoryBudget}
+            onRemoveCategory={this.handleRemoveCategory}
+          />
+        )}
+      </div>
+    );
+  }
 }
 
 export default App;
