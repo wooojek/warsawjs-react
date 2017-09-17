@@ -5,6 +5,8 @@ import Counter from './components/counter.js';
 import Stateless from "./components/stateless";
 import Stateful from "./components/stateful";
 import TransactionCard from "./components/transactionCard";
+import TransactionList from "./components/transactionList";
+import TransactionForm from "./components/transactionForm";
 
 function App2(props) {
     return <button onClick={props.func}> {props.name}</button>
@@ -45,11 +47,32 @@ class App extends Component {
         }
     }
 
+    removeTransaction = ({ id }) => {
+        const temp = this.state.transactions.slice();
+
+        const results = temp.filter(item => item.id !== id);
+
+        this.setState({
+            transactions: results,
+        });
+    }
+
+    handleSubmit = (newRecord) => {
+        const { transactions } = this.state;
+        const lastIndex = this.state.transactions[transactions.length-1].id;
+
+        this.setState({
+            transactions: [
+                ...transactions,
+                { id: lastIndex + 1, ...newRecord }
+            ]
+        });
+    }
+
     render() {
-        console.log(this.state);
-        const transaction = this.state.transactions[0];
-        const { description } = this.state.transactions[1];
-        console.log(transaction);
+        // const transaction = this.state.transactions[0];
+        // const { description } = this.state.transactions[1];
+        const { transactions } = this.state;
         return (
             <div className="App">
                 <div className="App-header">
@@ -59,8 +82,8 @@ class App extends Component {
                 <p className="App-intro">
                     Hi {this.props.name}!
                 </p>
-                <TransactionCard transaction={transaction}/>
-                {/*<TransactionCard/>*/}
+                <TransactionForm handleSubmit={this.handleSubmit}/>
+                <TransactionList transactions={transactions} onRemoveTransaction={this.removeTransaction}/>
             </div>
         );
     }
