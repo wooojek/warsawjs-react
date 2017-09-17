@@ -1,8 +1,9 @@
-# #6 Category list
+# #8 Category form
 
 ## Cele:
-- Utrwalenie listowania w komponencie wartości przekazanych propsami
+- Utrwalenie dodawania elementów do tablicy w state za pomocą formularza
 
 ## Kroki:
-- [ ] Utworzyć i wyświetlić komponent `CategoryList`
-- [ ] Utworzyć w najwyższym komponencie metodę do usuwania ze state kategorii o konkretnym id i użyć jej w komponencie `CategoryCard`
+- [ ] Utworzyć i wyświetlić komponent `CategoryForm` z kontrolowanymi inputami
+- [ ] Utworzyć w najwyższym komponencie metodę `handleAddCategory` do dodawania kolejnego obiektu kategorii do tablicy i zapisywanie jej do state
+- [ ] Połączyć formularz z metodą `handleAddCategory`

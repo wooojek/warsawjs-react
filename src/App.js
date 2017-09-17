@@ -9,6 +9,7 @@ import './App.css';
 
 class App extends Component {
   state = {
+    currentView: 'transactions',
     transactions: [
       {
         id: 1,
@@ -83,14 +84,29 @@ class App extends Component {
     this.setState({ categories });
   }
 
+  handleAddCategory = (category) => {
+    const { categories } = this.state;
+
+    this.setState({
+      categories: [
+        ...categories,
+        { id: Math.random().toString(36).substring(7), ...category }
+      ]
+    });
+  }
+
   handleRemoveCategory = ({ id }) => {
     const { categories } = this.state;
 
     this.setState({ categories: categories.filter(category => category.id !== id) });
   }
 
+  handleChangeView = (view) => {
+    this.setState({ currentView: view });
+  }
+
   render() {
-    const { transactions, categories } = this.state;
+    const { transactions, categories, currentView } = this.state;
 
     return (
       <div className="App">
@@ -98,16 +114,24 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <TransactionList
-          items={transactions}
-          onRemoveTransaction={this.handleRemoveTransaction}
-          onAddTransaction={this.handleAddTransaction}
-        />
-        <CategoryList
-          items={categories}
-          handleChangeCategoryBudget={this.handleChangeCategoryBudget}
-          onRemoveCategory={this.handleRemoveCategory}
-        />
+        <div>
+          <button onClick={() => this.handleChangeView('transactions')}>Transactions</button>
+          <button onClick={() => this.handleChangeView('categories')}>Categories</button>
+        </div>
+        {currentView === 'transactions' ? (
+          <TransactionList
+            items={transactions}
+            onRemoveTransaction={this.handleRemoveTransaction}
+            onAddTransaction={this.handleAddTransaction}
+          />
+        ) : (
+          <CategoryList
+            items={categories}
+            handleChangeCategoryBudget={this.handleChangeCategoryBudget}
+            onRemoveCategory={this.handleRemoveCategory}
+            onAddCategory={this.handleAddCategory}
+          />
+        )}
       </div>
     );
   }
