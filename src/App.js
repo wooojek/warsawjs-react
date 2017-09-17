@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Counter from './components/Counter.js';
 
 function App2(props) {
     return <button onClick={props.func}> {props.name}</button>
@@ -10,7 +11,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            counter: 0,
+            counter: 5,
             lista: ["a", "b", "c"]
         }
     }
@@ -21,7 +22,7 @@ class App extends Component {
                 console.log(this.state.counter);
             })
 
-    }
+    };
 
     render() {
         console.log(this.props);
@@ -36,14 +37,10 @@ class App extends Component {
                     <h2>Welcome to React</h2>
                 </div>
                 <p className="App-intro">
-                    Hi {this.props.name}, {this.state.counter}
+                    Hi {this.props.name}!
                 </p>
-                <button onClick={this.klikam}>
-                    tutaj
-                </button>
-                <App2 name={this.props.name} func={this.klikam}/>
-                <div>{this.state.lista}</div>
-                <ul>{ul}</ul>
+                <button onClick={this.klikam}>+1</button>
+                <Counter count={this.state.counter}/>
             </div>
         );
     }
