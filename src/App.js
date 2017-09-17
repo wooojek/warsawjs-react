@@ -9,7 +9,6 @@ import './App.css';
 
 class App extends Component {
   state = {
-    currentView: 'transactions',
     transactions: [
       {
         id: 1,
@@ -90,12 +89,8 @@ class App extends Component {
     this.setState({ categories: categories.filter(category => category.id !== id) });
   }
 
-  handleChangeView = (view) => {
-    this.setState({ currentView: view });
-  }
-
   render() {
-    const { transactions, categories, currentView } = this.state;
+    const { transactions, categories } = this.state;
 
     return (
       <div className="App">
@@ -103,23 +98,16 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <div>
-          <button onClick={() => this.handleChangeView('transactions')}>Transactions</button>
-          <button onClick={() => this.handleChangeView('categories')}>Categories</button>
-        </div>
-        {currentView === 'transactions' ? (
-          <TransactionList
-            items={transactions}
-            onRemoveTransaction={this.handleRemoveTransaction}
-            onAddTransaction={this.handleAddTransaction}
-          />
-        ) : (
-          <CategoryList
-            items={categories}
-            handleChangeCategoryBudget={this.handleChangeCategoryBudget}
-            onRemoveCategory={this.handleRemoveCategory}
-          />
-        )}
+        <TransactionList
+          items={transactions}
+          onRemoveTransaction={this.handleRemoveTransaction}
+          onAddTransaction={this.handleAddTransaction}
+        />
+        <CategoryList
+          items={categories}
+          handleChangeCategoryBudget={this.handleChangeCategoryBudget}
+          onRemoveCategory={this.handleRemoveCategory}
+        />
       </div>
     );
   }

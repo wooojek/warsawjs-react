@@ -1,10 +1,8 @@
-# #7 Views logic
+# #6 Category list
 
 ## Cele:
-- Utrwalenie sterowania renderowanymi elementami widoku na podstawie wartości ze state
+- Utrwalenie listowania w komponencie wartości przekazanych propsami
 
 ## Kroki:
-- [ ] Utworzyć w state wartość `currentView: 'transactions'`
-- [ ] Utworzyć buttony `Transactions` oraz `Categories` do sterowania który widok ma być widoczny
-- [ ] Utworzyć metodę zmieniającą wartość `currentView`
-- [ ] Uzależnić renderowanie komponentów od wartości `currentView`
+- [ ] Utworzyć i wyświetlić komponent `CategoryList`
+- [ ] Utworzyć w najwyższym komponencie metodę do usuwania ze state kategorii o konkretnym id i użyć jej w komponencie `CategoryCard`
